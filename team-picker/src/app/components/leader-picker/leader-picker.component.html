@@ -1,0 +1,184 @@
+<mat-stepper linear="true" #stepper>
+    <mat-step [stepControl]="firstStepFg">
+        <form [formGroup]="firstStepFg">
+            <ng-template matStepLabel>Escolha os líderes</ng-template>
+            <div class="row justify-content-center my-4">
+                <div class="col-auto">
+                    <mat-form-field>
+                        <mat-label>Líder 1</mat-label>
+                        <input matInput placeholder="Nickname" formControlName="firstLeader" required>
+                    </mat-form-field>
+                </div>
+                <div class="col-auto h1 px-5">
+                    <mat-icon [inline]="true">groups_2</mat-icon>
+                </div>
+                <div class="col-auto">
+                    <mat-form-field>
+                        <mat-label>Líder 2</mat-label>
+                        <input matInput placeholder="Nickname" formControlName="secondLeader" required>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div>
+                <button mat-flat-button [disabled]="firstStepFg.invalid" matStepperNext>Próximo</button>
+            </div>
+        </form>
+    </mat-step>
+
+
+    <!--  ADIÇÃO DOS PLAYERS  -->
+    <mat-step [stepControl]="secondStepFg" label="Adicionar jogadores">
+        <div class="row justify-content-center my-4">
+            <div class="col-4">
+                <mat-form-field class="pe-none w-100">
+                    <mat-label>Líder 1</mat-label>
+                    <input matInput [value]="firstLeader.value" readonly>
+                </mat-form-field>
+            </div>
+            <div class="col-auto h1 px-5">
+                <mat-icon [inline]="true">groups_2</mat-icon>
+            </div>
+            <div class="col-4">
+                <mat-form-field class="pe-none w-100">
+                    <mat-label>Líder 2</mat-label>
+                    <input matInput [value]="secondLeader.value" readonly>
+                </mat-form-field>
+            </div>
+        </div>
+        <form [formGroup]="secondStepFg">
+            <p>
+                <mat-icon>group_add</mat-icon>
+                Adicione os jogadores
+            </p>
+            <div class="row">
+                <mat-form-field>
+                    <mat-label>Jogadores disponíveis ({{ availablePlayers.value.length }} de 8)</mat-label>
+                    <mat-chip-grid #chipGrid [formControl]="availablePlayers">
+                        @for (player of players(); track player) {
+                            <mat-chip-row (removed)="removePlayer(player)">
+                                {{ player }}
+                                <button matChipRemove>
+                                    <mat-icon>cancel</mat-icon>
+                                </button>
+                            </mat-chip-row>
+                        }
+                    </mat-chip-grid>
+                    <input
+                        placeholder="Novo jogador ..."
+                        (matChipInputTokenEnd)="addPlayer($event)"
+                        [matChipInputFor]="chipGrid"
+                    />
+                </mat-form-field>
+            </div>
+
+            <div class="d-flex gap-3">
+                <button mat-stroked-button matStepperPrevious>Voltar</button>
+                <button mat-flat-button matStepperNext [disabled]="secondStepFg.invalid">Próximo</button>
+            </div>
+        </form>
+    </mat-step>
+
+    <!--  ESCOLHA DOS TIMES  -->
+    <mat-step [stepControl]="thirdStepFg" label="Escolha os times">
+        <div class="row justify-content-center my-4">
+            <div class="col-4">
+                <mat-form-field class="pe-none w-100">
+                    <mat-label>Líder 1</mat-label>
+                    <input matInput [value]="firstLeader.value" readonly>
+                </mat-form-field>
+            </div>
+            <div class="col-2">
+                <h1 class="text-center">
+                    <mat-icon [inline]="true">groups_2</mat-icon>
+                </h1>
+            </div>
+            <div class="col-4">
+                <mat-form-field class="pe-none w-100">
+                    <mat-label>Líder 2</mat-label>
+                    <input matInput [value]="secondLeader.value" readonly>
+                </mat-form-field>
+            </div>
+        </div>
+        <form [formGroup]="thirdStepFg">
+
+            <div class="row justify-content-center my-4">
+                <div class="col-4 p-3 border border-2 rounded-4"
+                     [class.border-cyan]="currentPicker === 1 && firstTeam!.value!.length + secondTeam!.value!.length < 8"
+                     [class.border-3]="currentPicker === 1"
+                     [class.border-success]="firstTeam!.value!.length + secondTeam!.value!.length === 8">
+                    <mat-form-field class="w-100">
+                        <mat-label>Escolha um jogador</mat-label>
+                        <mat-select
+                            [disabled]="disableFirstLeader || firstTeam!.value!.length + secondTeam!.value!.length >= 8"
+                            (selectionChange)="addTeamMember($event, 1)">
+                            @for (player of availablePlayers.value; track player) {
+                                <mat-option [value]="player" [disabled]="playerAlreadyPicked(player)">{{ player }}
+                                </mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-list role="list" [@listAnimation]="firstTeam?.value?.length">
+                        @for (player of firstTeam?.value; track player) {
+                            <mat-list-item role="listitem">
+                                <mat-icon class="me-2">person</mat-icon>
+                                {{ player }}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                        }
+                    </mat-list>
+                </div>
+                <div class="col-4 p-3 offset-2 border border-2 rounded-4" [class.border-cyan]="currentPicker === 2"
+                     [class.border-3]="currentPicker === 2"
+                     [class.border-success]="firstTeam!.value!.length + secondTeam!.value!.length === 8">
+
+                    <mat-form-field class="w-100">
+                        <mat-label>Escolha um jogador</mat-label>
+                        <mat-select
+                            [disabled]="disableSecondLeader || firstTeam!.value!.length + secondTeam!.value!.length >= 8"
+                            (selectionChange)="addTeamMember($event, 2)">
+
+                            @for (player of availablePlayers.value; track player) {
+                                <mat-option [value]="player" [disabled]="playerAlreadyPicked(player)">{{ player }}
+                                </mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-list role="list" [@listAnimation]="secondTeam?.value?.length">
+                        @for (player of secondTeam?.value; track player) {
+                            <mat-list-item role="listitem">
+                                <mat-icon class="me-2">person</mat-icon>
+                                {{ player }}
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                        }
+                    </mat-list>
+
+                </div>
+            </div>
+
+            <div class="d-flex gap-3">
+                <button mat-stroked-button matStepperPrevious>Voltar</button>
+                <button mat-flat-button matStepperNext [disabled]="thirdStepFg.invalid">Próximo</button>
+            </div>
+        </form>
+    </mat-step>
+
+
+    <mat-step>
+        <ng-template matStepLabel>Resultado</ng-template>
+        <h6 class="text-center mt-3">Times finalizados, agora é só copiar e compartilhar!</h6>
+        <div class="d-flex justify-content-center my-3">
+            <button mat-flat-button color="accent" (click)="copyTeam()">Copiar
+                <mat-icon *ngIf="copiedSuccessfully" @checkAnimation>done</mat-icon>
+            </button>
+        </div>
+        <div>
+            <button mat-button matStepperPrevious>Voltar</button>
+        </div>
+    </mat-step>
+
+</mat-stepper>
+

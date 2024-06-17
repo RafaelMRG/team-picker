@@ -1,0 +1,5 @@
+mat-form-field.pe-none {
+    & *{
+        pointer-events: none !important;
+    };
+}

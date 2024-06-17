@@ -1,0 +1,94 @@
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <form class="pb-3">
+                <div class="d-flex flex-row align-items-center gap-4">
+                    <mat-form-field>
+                        <mat-label>Nickname</mat-label>
+                        <input #jogador type="text" matInput placeholder="Ex. Jogador 1"
+                               (keydown.enter)="addPlayerToList($event, jogador.value, jogador)">
+                        <mat-hint>Enter para adicionar na lista</mat-hint>
+                    </mat-form-field>
+
+                    <div matTooltipPosition="after"
+                         [matTooltip]="playerList.length % 2 === 0 ? '' : 'Adicione um número par de jogadores para randomizar' ">
+                        <button mat-flat-button
+                                [disabled]="playerList.length % 2 !== 0"
+                                (click)="randomize();$event.preventDefault()"
+                        >
+                            Randomizar
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <mat-divider class="my-3"></mat-divider>
+
+            <div class="d-flex flex-row gap-3 align-items-center">
+                <span class="small">Tamanho: {{ playerList.length }}</span>
+                <span><button mat-button (click)="clearPlayerList()">Limpar lista</button></span>
+            </div>
+            <mat-list [@listAnimation]="playerList.length">
+                @for (player of playerList; track player) {
+                    <mat-list-item>
+                        <div class="d-flex align-items-center justify-content-between gap-3">
+                            <div class="d-flex gap-3 align-items-center">
+                                <button mat-button [matMenuTriggerFor]="menu" matTooltip="Tier do jogador"
+                                        matTooltipPosition="after">{{ PLAYER_TIER[player.tier] }}
+                                </button>
+                                <mat-menu #menu="matMenu">
+                                    @for (tier of PLAYER_TIERS_STR; track tier) {
+                                        <button mat-menu-item
+                                                (click)="updatePlayerTier(player, tier)">{{ tier }}
+                                        </button>
+                                    }
+                                </mat-menu>
+                                <span>{{ player.nick }} </span>
+                            </div>
+
+                            <button mat-mini-fab (click)="removePlayerFromList($index)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
+                    </mat-list-item>
+                }
+            </mat-list>
+        </div>
+        <div class="col-3 offset-1">
+            <span> Time 1 </span>
+            <ng-container [ngTemplateOutlet]="randomizerNeedHint"></ng-container>
+            <mat-list [@listAnimation]="teamOne.length">
+                @for (player of teamOne; track player) {
+                    <mat-list-item>
+                        <mat-icon>person</mat-icon>
+                        <button mat-button>{{ PLAYER_TIER[player.tier] }}</button>
+                        <span> {{ player.nick }} </span>
+                    </mat-list-item>
+                }
+
+            </mat-list>
+        </div>
+        <div class="col-3 offset-1">
+            <span> Time 2 </span>
+            <ng-container [ngTemplateOutlet]="randomizerNeedHint"></ng-container>
+            <mat-list [@listAnimation]="teamTwo.length">
+                @for (player of teamTwo; track player) {
+                    <mat-list-item>
+                        <mat-icon>person</mat-icon>
+                        <button mat-button>{{ PLAYER_TIER[player.tier] }}</button>
+
+                        <span>{{ player.nick }} </span>
+                    </mat-list-item>
+                }
+
+            </mat-list>
+        </div>
+    </div>
+</div>
+
+<ng-template #randomizerNeedHint>
+    @if (teamTwo.length === 0) {
+        <p class="my-2 text-secondary">Randomize para formar o time</p>
+    }
+</ng-template>
+
