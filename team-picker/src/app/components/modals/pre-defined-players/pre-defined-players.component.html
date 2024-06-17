@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>Configurar lista pré-definida</h2>
+<mat-dialog-content>
+
+
+    <button mat-flat-button (click)="submitToInsert()">Inserir jogadores selecionados</button>
+    @if (preDefinedPlayers) {
+        <mat-list [@listAnimation]="preDefinedPlayers.length">
+            @for (player of preDefinedPlayers; track player.nick) {
+                <mat-list-item>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <mat-icon>person</mat-icon>
+                            <button tabindex="-1" mat-button matTooltip="Tier do jogador"
+                                    matTooltipPosition="after">{{ PLAYER_TIER[player.tier] }}
+                            </button>
+
+                            <span>{{ player.nick }}</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <mat-checkbox
+                                (change)="checkPlayer($event, player)"
+                                matTooltip="Selecione para inserir este item na lista de jogadores"
+                                class="example-margin"
+                            >
+                            </mat-checkbox>
+                            <button mat-mini-fab (click)="removePlayer(player)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </mat-list-item>
+            }
+        </mat-list>
+    } @else {
+        <p>Nenhum player registrado ainda</p>
+    }
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close>Fechar</button>
+</mat-dialog-actions>

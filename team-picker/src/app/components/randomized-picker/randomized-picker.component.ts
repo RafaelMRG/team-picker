@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, effect, inject} from '@angular/core';
 import {MatFormField, MatHint, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
@@ -7,13 +7,14 @@ import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatMiniFabButton} from "@angular/material/button";
 import {MatTooltip} from "@angular/material/tooltip";
 import {MatDivider} from "@angular/material/divider";
-import _ from "lodash";
 import {JsonPipe, NgTemplateOutlet} from "@angular/common";
 import {ANIM_SLIDE_IN} from "../../material/animations";
 import {NotificationService} from "../../services/notification.service";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {Player, RandomizerService} from "../../services/randomizer.service";
-import {PlayerTierEnum} from "../../services/player-tier.enum";
+import {PLAYER_TIERS_STR, PlayerTierEnum} from "../../services/player-tier.enum";
+import {remove} from "lodash";
+import {PreDefinedManagerService} from "../../services/pre-defined-manager.service";
 
 @Component({
     selector: 'app-randomized-picker',
@@ -45,13 +46,22 @@ import {PlayerTierEnum} from "../../services/player-tier.enum";
 })
 export class RandomizedPickerComponent {
 
+    constructor() {
+        effect(() => {
+            this.manager.insertEvent().forEach(ply => {
+                this.processPlayerUpdate(ply.nick, ply);
+            })
+        })
+    }
+
     private readonly notificationService = inject(NotificationService);
     private readonly randomizerService = inject(RandomizerService);
+    private readonly manager = inject(PreDefinedManagerService);
 
     playerList: Player[] = [];
     teamOne: Player[] = [];
     teamTwo: Player[] = [];
-    readonly PLAYER_TIERS_STR = Object.keys(PlayerTierEnum).filter(key => !isNaN(Number(PlayerTierEnum[key as keyof typeof PlayerTierEnum])));
+    readonly PLAYER_TIERS_STR = PLAYER_TIERS_STR;
 
     removePlayerFromList(index: number) {
         this.playerList.splice(index, 1);
@@ -59,15 +69,22 @@ export class RandomizedPickerComponent {
 
     addPlayerToList(event: Event, player: string, input: HTMLInputElement): void {
         event.preventDefault();
-        const playerExists = !!this.playerList.find(plr => plr.nick === player)
+        const newPlayer = {nick: player, tier: PlayerTierEnum.S};
+        this.processPlayerUpdate(player, newPlayer);
+        input.value = '';
+        this.manager.addPlayerToStorage(newPlayer);
+    }
+
+
+    private processPlayerUpdate(player: string, newPlayer: Player) {
+        const playerExists = !!this.playerList.find(plr => plr.nick === player);
         if (playerExists) {
             this.notificationService.error('Nickname já existe, escreva outro!')
         } else if (player.trim() === '') {
             this.notificationService.error('Nickname está vazio, escrava corretamente!')
         } else {
-            this.playerList.push({nick: player, tier: PlayerTierEnum.S});
+            this.playerList.push(newPlayer);
         }
-        input.value = '';
     }
 
     randomize() {
@@ -75,12 +92,13 @@ export class RandomizedPickerComponent {
     }
 
     clearPlayerList() {
-        _.remove(this.playerList);
+        remove(this.playerList);
     }
 
     updatePlayerTier(player: Player, tier: string) {
         player.tier = PlayerTierEnum[tier as keyof typeof PlayerTierEnum];
         this.notificationService.normal(`Jogador ${player.nick} mudado para o tier ${tier}`)
+        this.manager.addPlayerToStorage(player);
     }
 
 

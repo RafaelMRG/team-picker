@@ -24,13 +24,12 @@ $theme: mat.define-theme(
             background: mat.get-theme-color($theme, primary-container);
         }
 
-        mat-list-item:hover {
-            & span {
-                transition: color 150ms ease-in-out;
-                color: mat.get-theme-color($theme, primary);
-            }
+    }
+    mat-list-item:hover {
+        & span {
+            transition: color 150ms ease-in-out;
+            color: mat.get-theme-color($theme, primary);
         }
-
     }
     .mdc-snackbar {
         margin: 2rem !important;
@@ -51,6 +50,22 @@ $theme: mat.define-theme(
         vertical-align: middle;
     }
 
+    button {
+        &.mdc-icon-button {
+            & mat-icon {
+                vertical-align: unset !important;
+            }
+
+            &.gear-anim {
+                &:hover {
+                    transform: rotate(90deg);
+                }
+
+                transition: transform 200ms ease-in-out;
+            }
+        }
+    }
+
     .border-cyan {
         border-color: mat.get-theme-color($theme, primary) !important;
     }
@@ -58,7 +73,7 @@ $theme: mat.define-theme(
 
 
 :root {
-    /*@include mat.all-component-themes($theme);*/
+    @include mat.all-component-themes($theme);
     @include theme($theme);
 }
 
