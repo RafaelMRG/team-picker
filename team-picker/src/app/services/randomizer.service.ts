@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import _ from "lodash";
+import {remove} from "lodash";
 import {PlayerTierEnum} from "./player-tier.enum";
 
 @Injectable({
@@ -9,8 +9,8 @@ export class RandomizerService {
 
 
     randomize(allPlayers: Player[], teamOne: Player[], teamTwo: Player[]) {
-        _.remove(teamOne);
-        _.remove(teamTwo);
+        remove(teamOne);
+        remove(teamTwo);
         const groupedTiers = this.groupByTiers(allPlayers);
         this.shuffleWithinGroups(groupedTiers);
         const sortedPlayers = this.sortByTierDescending(groupedTiers);

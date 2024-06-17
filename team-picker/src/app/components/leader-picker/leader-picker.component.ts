@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, effect, inject, signal, untracked} from '@angular/core';
 import {MatStepperModule} from "@angular/material/stepper";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
@@ -13,6 +13,8 @@ import {MatDivider} from "@angular/material/divider";
 import {Clipboard} from "@angular/cdk/clipboard";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ANIM_CHECKMARK, ANIM_SLIDE_IN} from "../../material/animations";
+import {PreDefinedManagerService} from "../../services/pre-defined-manager.service";
+import {PlayerTierEnum} from "../../services/player-tier.enum";
 
 @Component({
     selector: 'app-leader-picker',
@@ -41,6 +43,21 @@ import {ANIM_CHECKMARK, ANIM_SLIDE_IN} from "../../material/animations";
     animations: [ANIM_SLIDE_IN, ANIM_CHECKMARK]
 })
 export class LeaderPickerComponent {
+
+    protected readonly manager = inject(PreDefinedManagerService);
+
+    constructor() {
+        this.manager.insertEvent.set([]);
+        effect(() => {
+            const playersSource = this.manager.insertEvent();
+            untracked(() => {
+                const players: string[] = playersSource.map(ply => ply.nick);
+                this.players.set(players);
+                this.availablePlayers.setValue(this.players());
+                this.availablePlayers.markAllAsTouched();
+            })
+        });
+    }
 
     // First step
     firstStepFg = new FormGroup({
@@ -72,16 +89,16 @@ export class LeaderPickerComponent {
     addPlayer(event: MatChipInputEvent): void {
         const value = (event.value || '').trim();
 
-        // Add our keyword
         if (value && this.players().indexOf(value) === -1) {
             this.players.update(players => [...players, value]);
         }
 
-        // Clear the input value
         event.chipInput!.clear();
         this.availablePlayers.setValue(this.players());
         this.availablePlayers.markAllAsTouched();
+        this.manager.addPlayerToStorage({nick: value, tier: PlayerTierEnum['S']}, true)
     }
+
 
     // Third step
     thirdStepFg = new FormGroup({

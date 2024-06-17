@@ -1,5 +1,12 @@
 <mat-toolbar color="primary">
     <h1 class="mx-auto">TEAMPICKER</h1>
+    <button (click)="openPlayerManager()"
+            mat-icon-button
+            class="gear-anim"
+            matTooltip="Lista de players"
+            matTooltipPosition="left">
+        <mat-icon>settings</mat-icon>
+    </button>
 </mat-toolbar>
 
 <main class="py-4">
