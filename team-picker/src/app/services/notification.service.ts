@@ -1,26 +1,30 @@
-import {inject, Injectable} from '@angular/core';
-import {MatSnackBar} from "@angular/material/snack-bar";
+import { inject, Injectable } from '@angular/core';
+import { MatSnackBar, MatSnackBarConfig } from "@angular/material/snack-bar";
 
 @Injectable({
-    providedIn: 'root'
-})
+	            providedIn: 'root'
+            })
 export class NotificationService {
 
-    private readonly snackbar: MatSnackBar = inject(MatSnackBar);
+	private readonly snackbar: MatSnackBar = inject(MatSnackBar);
 
-    public error(message: string, duration?: number) {
+	public error(message: string, duration?: number) {
 
-        this.snackbar.open(message, 'Fechar', {
-            duration: duration ?? 3500,
-            panelClass: 'error-snackbar'
-        })
+		this.snackbar.open(message, 'Fechar', {
+			duration:   duration ?? 3500,
+			panelClass: 'error-snackbar'
+		})
 
-    }
+	}
 
-    public normal(message: string, duration?: number) {
-        this.snackbar.open(message, 'Fechar', {
-            duration: duration ?? 3500,
-        })
-    }
+	public normal(
+		message: string,
+		duration?: number,
+		extraConfig?: MatSnackBarConfig<never>) {
+		this.snackbar.open(message, 'Fechar', {
+			duration: duration ?? 3500,
+			...extraConfig
+		})
+	}
 
 }
