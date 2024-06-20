@@ -1,25 +1,25 @@
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-auto">
-            <h5>Escolha um modo de pick</h5>
-        </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-auto">
-            <button mat-stroked-button (click)="currentMode = 'random'">Randômico</button>
-        </div>
-        <div class="col-auto">
-            <button mat-stroked-button (click)="currentMode = 'leader'">Líder</button>
-        </div>
-    </div>
-    <mat-divider class="my-4"></mat-divider>
-    <div class="row justify-content-center my-4">
-        @if (currentMode === 'random') {
-            <app-randomized-picker></app-randomized-picker>
-        } @else if (currentMode === 'leader') {
-            <app-leader-picker></app-leader-picker>
-        } @else {
-            <h5 class="text-center">...</h5>
-        }
-    </div>
+	<div class="row justify-content-center">
+		<div class="col-auto">
+			<h5>Escolha um modo de pick</h5>
+		</div>
+	</div>
+	<div class="row justify-content-center">
+		<div class="col-auto">
+			<button mat-stroked-button (click)="currentMode = 'random'">Randômico</button>
+		</div>
+		<div class="col-auto">
+			<button mat-stroked-button (click)="currentMode = 'leader'">Líder</button>
+		</div>
+	</div>
+	<mat-divider class="my-4"></mat-divider>
+	<div class="row justify-content-center my-4 w-100 h-100 position-relative ">
+		@if (currentMode === 'random') {
+			<app-randomized-picker @componentAnimation></app-randomized-picker>
+		} @else if (currentMode === 'leader') {
+			<app-leader-picker @componentAnimation></app-leader-picker>
+		} @else {
+			<h5 class="text-center">Escolha acima</h5>
+		}
+	</div>
 </div>

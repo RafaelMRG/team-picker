@@ -3,91 +3,101 @@
 @use '@angular/material' as mat;
 
 $theme: mat.define-theme(
-        (
-            color: (
-                theme-type: dark,
-                primary: mat.$cyan-palette,
-                tertiary: mat.$orange-palette,
-            ),
-        )
+                (
+                        color: (
+                                theme-type: dark,
+                                primary: mat.$cyan-palette,
+                                tertiary: mat.$orange-palette,
+                        ),
+                )
 );
 
 @include mat.core();
 @include mat.color-variants-backwards-compatibility($theme);
 
 @mixin theme($theme) {
-    app-root {
-        color: mat.get-theme-color($theme, primary, 99);
+  app-root {
+    color: mat.get-theme-color($theme, primary, 99);
 
-        mat-toolbar {
-            color: mat.get-theme-color($theme, primary);
-            background: mat.get-theme-color($theme, primary-container);
+    mat-toolbar {
+      color: mat.get-theme-color($theme, primary);
+      background: mat.get-theme-color($theme, primary-container);
+    }
+
+  }
+
+  mat-tooltip-component {
+    & * {
+      white-space: pre-line;
+    }
+  }
+
+  mat-list-item:hover {
+    & span {
+      transition: color 150ms ease-in-out;
+      color: mat.get-theme-color($theme, primary);
+    }
+  }
+  .mdc-snackbar {
+    margin: 2rem !important;
+  }
+
+  .error-snackbar {
+    & .mat-mdc-snackbar-surface {
+      background-color: mat.get-theme-color($theme, error-container) !important;
+      color: mat.get-theme-color($theme, on-error-container) !important;
+    }
+
+    & .mdc-button__label {
+      color: mat.get-theme-color($theme, on-error-container) !important;
+    }
+  }
+
+  mat-icon {
+    vertical-align: sub;
+  }
+
+  button {
+    &.mdc-icon-button {
+      & mat-icon {
+        vertical-align: unset !important;
+      }
+
+      &.gear-anim {
+        &:hover {
+          transform: rotate(90deg);
         }
 
+        transition: transform 200ms ease-in-out;
+      }
     }
-    mat-list-item:hover {
-        & span {
-            transition: color 150ms ease-in-out;
-            color: mat.get-theme-color($theme, primary);
-        }
-    }
-    .mdc-snackbar {
-        margin: 2rem !important;
-    }
+  }
 
-    .error-snackbar {
-        & .mat-mdc-snackbar-surface {
-            background-color: mat.get-theme-color($theme, error-container) !important;
-            color: mat.get-theme-color($theme, on-error-container) !important;
-        }
-
-        & .mdc-button__label {
-            color: mat.get-theme-color($theme, on-error-container) !important;
-        }
-    }
-
-    mat-icon {
-        vertical-align: middle;
-    }
-
-    button {
-        &.mdc-icon-button {
-            & mat-icon {
-                vertical-align: unset !important;
-            }
-
-            &.gear-anim {
-                &:hover {
-                    transform: rotate(90deg);
-                }
-
-                transition: transform 200ms ease-in-out;
-            }
-        }
-    }
-
-    .border-cyan {
-        border-color: mat.get-theme-color($theme, primary) !important;
-    }
+  .border-cyan {
+    border-color: mat.get-theme-color($theme, primary) !important;
+  }
 }
 
 
 :root {
-    @include mat.all-component-themes($theme);
-    @include theme($theme);
+  @include mat.all-component-themes($theme);
+  @include theme($theme);
 }
 
 html, body {
-    height: 100%;
+  height: 100%;
 }
 
 body {
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  overflow-x: hidden;
 }
 
 .border {
-    transition: all 200ms ease-in-out;
+  transition: all 200ms ease-in-out;
 }
 
-
+.primary {
+  color: mat.get-theme-color($theme, primary, 70)
+}
