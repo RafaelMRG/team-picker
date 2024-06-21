@@ -1,20 +1,15 @@
 import { Component, inject } from '@angular/core';
 import {
-	CdkDragDrop,
-	DragDropModule,
-	moveItemInArray,
-	transferArrayItem
+	CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem
 } from "@angular/cdk/drag-drop";
 import { Player, PLAYER_TIER } from "../../../services/player.types";
 import { JsonPipe, KeyValuePipe } from "@angular/common";
 import { PlayerStateService } from "../../../services/player-state.service";
 import {
-	MatDialogActions,
-	MatDialogClose,
-	MatDialogContent,
-	MatDialogTitle
+	MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle
 } from "@angular/material/dialog";
 import { MatButton } from "@angular/material/button";
+
 
 @Component({
 	           selector:    'app-tier-editor',
@@ -41,29 +36,21 @@ export class TierEditorComponent {
 
 	protected players = this.playerStateSvc.playerHistory();
 	protected byTiers: Record<string, Player[]> = {}
-	protected listOfTiers = Object.values(this.byTiers);
-
-	protected readonly Object = Object;
-
 
 	drop(event: CdkDragDrop<Player[]>, tier: string) {
 		if ( event.previousContainer === event.container ) {
 			moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
 		} else {
-			transferArrayItem(
-				event.previousContainer.data,
-				event.container.data,
-				event.previousIndex,
-				event.currentIndex,
-			);
+			transferArrayItem(event.previousContainer.data,
+			                  event.container.data,
+			                  event.previousIndex,
+			                  event.currentIndex,);
 		}
 		this.updatePlayerTier(event.item.data, tier);
 	}
 
 	updatePlayerTier(player: Player, tier: string) {
-		this.playerStateSvc.updatePlayerTier(
-			player,
-			PLAYER_TIER[tier as keyof typeof PLAYER_TIER]);
+		this.playerStateSvc.updatePlayerTier(player, PLAYER_TIER[tier as keyof typeof PLAYER_TIER]);
 	}
 
 

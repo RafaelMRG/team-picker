@@ -2,11 +2,11 @@
 <mat-dialog-content>
 
 	<div cdkDropListGroup>
-		@for (tier of byTiers | keyvalue; track tier.key) {
-		<div class="example-container row flex-nowrap py-1">
-			<div class="col-1 g-0">
-				<div class="row align-items-center h-100 g-0">
-					<h6 class="text-center m-0 p-0">{{ tier.key }}</h6>
+		@for (tier of tiers; track tier) {
+			<div class="example-container row flex-nowrap py-1">
+				<div class="col-1 g-0">
+					<div class="row align-items-center h-100 g-0">
+						<h6 class="text-center m-0 p-0">{{ tier }}</h6>
 					</div>
 				</div>
 
@@ -15,19 +15,19 @@
 							cdkDropList
 							class="example-list mat-elevation-z10"
 							cdkDropListOrientation="horizontal"
-							[cdkDropListData]="tier.value"
-							(cdkDropListDropped)="drop($event, tier.key)">
-						@for (player of tier.value; track player.nick){
-		<div
-				class="example-box mat-elevation-z8" cdkDrag [cdkDragData]="player">
-			{{ player.nick }}
-		</div>
-		}
-		</div>
+							[cdkDropListData]="byTiers[tier]"
+							(cdkDropListDropped)="drop($event, tier)">
+						@for (player of byTiers[tier]; track player.nick) {
+							<div
+									class="example-box mat-elevation-z8" cdkDrag [cdkDragData]="player">
+								{{ player.nick }}
+							</div>
+						}
+					</div>
 
-		</div>
+				</div>
 
-	</div>
+			</div>
 		}
 	</div>
 
