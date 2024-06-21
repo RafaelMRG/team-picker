@@ -1,0 +1,38 @@
+<h2 mat-dialog-title>Editor de tiers</h2>
+<mat-dialog-content>
+
+	<div cdkDropListGroup>
+		@for (tier of byTiers | keyvalue; track tier.key) {
+			<div class="example-container row flex-nowrap py-1">
+				<div class="col-1 g-0">
+					<div class="row align-items-center h-100 g-0">
+						<h6 class="text-center m-0 p-0">{{ tier.key }}</h6>
+					</div>
+				</div>
+
+				<div class="col-11 g-0">
+					<div
+							cdkDropList
+							class="example-list mat-elevation-z10"
+							cdkDropListOrientation="horizontal"
+							[cdkDropListData]="tier.value"
+							(cdkDropListDropped)="drop( $event, tier.key )">
+						@for (player of tier.value; track player.nick) {
+							<div
+									class="example-box mat-elevation-z8" cdkDrag [cdkDragData]="player">
+								{{ player.nick }}
+							</div>
+						}
+					</div>
+
+				</div>
+
+			</div>
+		}
+	</div>
+
+
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button class="ms-auto" mat-button mat-dialog-close>Fechar</button>
+</mat-dialog-actions>

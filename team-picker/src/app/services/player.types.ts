@@ -1,5 +1,14 @@
 export enum PLAYER_TIER {
-	'S', 'A', 'B', 'C', 'D', 'E', 'F'
+	'S+',
+	'S',
+	'A+',
+	'A',
+	'B+',
+	'B',
+	'C',
+	'D',
+	'E',
+	'F',
 }
 
 export const PLAYER_TIERS_STR = Object.keys(PLAYER_TIER).filter(key => !isNaN(Number(

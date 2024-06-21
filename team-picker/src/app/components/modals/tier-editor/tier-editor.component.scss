@@ -1,0 +1,74 @@
+@use '@angular/material' as mat;
+@use '@styles/styles' as *;
+
+.example-container {
+  width: 100%;
+}
+
+.example-list {
+  flex-basis: 100%;
+  max-width: 100%;
+  border: solid 1px mat.get-theme-color($theme, primary);
+  min-height: 60px;
+  display: flex;
+  flex-direction: row;
+  background: mat.get-theme-color($theme, on-primary-fixed);
+  border-radius: 4px;
+  padding: 5px 5px;
+  overflow: hidden;
+  overflow-x: auto;
+  box-sizing: border-box;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 20px;
+}
+
+.example-box {
+  padding: 20px 10px;
+  border-radius: 5px;
+  border: solid 1px #ababab;
+  margin-right: 6px;
+  color: mat.get-theme-color($theme, on-secondary-container);
+  align-items: center;
+  box-sizing: border-box;
+  cursor: move;
+  background: mat.get-theme-color($theme, secondary-container);
+  font-size: 14px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+  scroll-snap-align: start;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  margin: 0;
+  padding: 20px 10px;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-box:last-child {
+  border: none;
+}
+
+.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+mat-dialog-content {
+  max-height: 100%;
+}
