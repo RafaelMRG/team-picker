@@ -47,8 +47,6 @@ export class TierEditorComponent {
 
 
 	drop(event: CdkDragDrop<Player[]>, tier: string) {
-		console.log(event)
-		console.log(event.item)
 		if ( event.previousContainer === event.container ) {
 			moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
 		} else {
