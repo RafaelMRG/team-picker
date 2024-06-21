@@ -15,8 +15,10 @@ $theme: mat.define-theme(
 @include mat.core();
 @include mat.color-variants-backwards-compatibility($theme);
 
-@mixin theme($theme) {
+@mixin theme() {
   app-root {
+
+
     color: mat.get-theme-color($theme, primary, 99);
 
     mat-toolbar {
@@ -78,10 +80,28 @@ $theme: mat.define-theme(
   }
 }
 
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px
+}
+
+::-webkit-scrollbar-track {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+
+
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: mat.get-theme-color($theme, neutral, 40);
+}
 
 :root {
-  @include mat.all-component-themes($theme);
-  @include theme($theme);
+  //@include mat.core-theme($theme);
+  //@include mat.all-component-themes($theme);
+  @include theme();
 }
 
 html, body {

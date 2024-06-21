@@ -5,6 +5,7 @@ import { MaterialModule } from "./material/material.module";
 import { MatTooltip } from "@angular/material/tooltip";
 import { MatDialog } from "@angular/material/dialog";
 import { PreDefinedPlayersComponent } from "./components/modals/pre-defined-players/pre-defined-players.component";
+import { TierEditorComponent } from "./components/modals/tier-editor/tier-editor.component";
 
 @Component({
 	           selector:    'app-root',
@@ -18,6 +19,10 @@ export class AppComponent {
 
 	openPlayerManager() {
 		this.dialog.open(PreDefinedPlayersComponent, { minWidth: '40vw' })
+	}
+
+	openTierEditor() {
+		this.dialog.open(TierEditorComponent, { minWidth: '95vw', minHeight: '95vh' })
 	}
 
 	title = 'team-picker';

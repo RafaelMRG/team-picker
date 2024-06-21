@@ -1,14 +1,22 @@
 <mat-toolbar color="primary">
-    <h1 class="mx-auto">TEAMPICKER</h1>
-    <button (click)="openPlayerManager()"
-            mat-icon-button
-            class="gear-anim"
-            matTooltip="Lista de players"
-            matTooltipPosition="left">
-        <mat-icon>settings</mat-icon>
-    </button>
+	<h1 class="mx-auto">TEAMPICKER</h1>
+	<button
+			matTooltip="Editar tiers"
+			matTooltipShowDelay="250"
+			(click)="openTierEditor()"
+			mat-icon-button>
+		<mat-icon>military_tech</mat-icon>
+	</button>
+	<button
+			(click)="openPlayerManager()"
+			mat-icon-button
+			class="gear-anim"
+			matTooltipShowDelay="250"
+			matTooltip="Lista de players">
+		<mat-icon>settings</mat-icon>
+	</button>
 </mat-toolbar>
 
 <main class="py-4">
-    <router-outlet/>
+	<router-outlet/>
 </main>
