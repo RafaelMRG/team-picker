@@ -8,12 +8,26 @@
 						<input
 								#jogador
 								type="text"
-								matInput
 								placeholder="Ex. Jogador 1"
-								(keydown.enter)="addPlayerToList($event, jogador.value, jogador)">
+								matInput
+								(keydown.enter)="addPlayerToList($event, jogador.value, jogador);
+								closeAutocompleteInput()"
+								[matAutocomplete]="auto">
+						<mat-autocomplete #auto="matAutocomplete">
+							@for (player of playerStateSvc.playerHistory(); track player.nick) {
+								<mat-option [value]="player.nick" class="w-100">
+									<div class="d-flex gap-2">
+										<div
+												class="primary"
+												style="width: 1.5rem">{{ player.tier | numberToRank }}
+										</div>
+										<span>{{ player.nick }}</span>
+									</div>
+								</mat-option>
+							}
+						</mat-autocomplete>
 						<mat-hint>Enter para adicionar na lista</mat-hint>
 					</mat-form-field>
-
 					<div
 							matTooltipPosition="after" [matTooltip]="playerStateSvc.rngPlayerList().length % 2 === 0 ?
                           '' :

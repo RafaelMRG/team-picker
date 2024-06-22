@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { MatFormField, MatHint, MatLabel } from "@angular/material/form-field";
 import { MatInput } from "@angular/material/input";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -16,30 +16,15 @@ import { Player, PLAYER_TIER, PLAYER_TIERS_STR } from "../../services/player.typ
 import { PlayerStateService } from "../../services/player-state.service";
 import { NumberToRankPipe } from "../../pipes/number-to-rank.pipe";
 import { Clipboard } from "@angular/cdk/clipboard";
+import { MatAutocomplete, MatAutocompleteTrigger, MatOption } from "@angular/material/autocomplete";
+import { before } from "lodash";
+
 
 @Component({
 	           selector:    'app-randomized-picker',
 	           standalone:  true,
 	           imports:     [
-		           MatFormField,
-		           MatInput,
-		           MatLabel,
-		           ReactiveFormsModule,
-		           MatList,
-		           MatListItem,
-		           MatIcon,
-		           MatMiniFabButton,
-		           MatHint,
-		           MatButton,
-		           MatTooltip,
-		           MatDivider,
-		           NgTemplateOutlet,
-		           MatMenuTrigger,
-		           MatMenu,
-		           MatMenuItem,
-		           JsonPipe,
-		           DecimalPipe,
-		           NumberToRankPipe
+		           MatFormField, MatInput, MatLabel, ReactiveFormsModule, MatList, MatListItem, MatIcon, MatMiniFabButton, MatHint, MatButton, MatTooltip, MatDivider, NgTemplateOutlet, MatMenuTrigger, MatMenu, MatMenuItem, JsonPipe, DecimalPipe, NumberToRankPipe, MatAutocompleteTrigger, MatAutocomplete, MatOption
 	           ],
 	           templateUrl: './randomized-picker.component.html',
 	           styleUrl:    './randomized-picker.component.scss',
@@ -57,8 +42,7 @@ export class RandomizedPickerComponent {
 	teamOne: Player[] = [];
 	teamTwo: Player[] = [];
 	tierAvgs: { teamOneAvg?: number; teamTwoAvg?: number } = {
-		teamOneAvg: undefined,
-		teamTwoAvg: undefined,
+		teamOneAvg: undefined, teamTwoAvg: undefined,
 
 	}
 	protected readonly PLAYER_TIERS_STR = PLAYER_TIERS_STR;
@@ -77,6 +61,7 @@ export class RandomizedPickerComponent {
 
 
 	private processPlayerUpdate(player: string, newPlayer: Player) {
+
 		const pTrim = player.trim();
 		const playerList = this.playerStateSvc.rngPlayerList
 		const playerExists = !!playerList().find(plr => plr.nick === pTrim);
@@ -85,6 +70,9 @@ export class RandomizedPickerComponent {
 		} else if ( pTrim === '' ) {
 			this.notificationService.error('Nickname está vazio, escrava corretamente!')
 		} else {
+			const playerHistory = this.playerStateSvc.playerHistory()
+			const playerFromHist = playerHistory.find(hist => hist.nick === newPlayer.nick);
+			newPlayer = playerFromHist ?? newPlayer;
 			playerList.update(curr => [ ...curr, newPlayer ])
 		}
 	}
@@ -96,8 +84,8 @@ export class RandomizedPickerComponent {
 	}
 
 	private clipboardTeam() {
-		const teamOneJoin = `Time 1: \n${ this.teamOne.join('\n >') }\n\n`
-		const teamTwoJoin = `Time 2: \n${ this.teamTwo.join('\n >') }`
+		const teamOneJoin = `Time 1: \n >${ this.teamOne.map(ply => ply.nick).join('\n >') }\n\n`
+		const teamTwoJoin = `Time 2: \n >${ this.teamTwo.map(ply => ply.nick).join('\n >') }`
 		const success = this.clipboard.copy(teamOneJoin + teamTwoJoin);
 		if ( success ) {
 			this.notificationService.normal('Time randomizado e copiado!')
@@ -111,15 +99,12 @@ export class RandomizedPickerComponent {
 	}
 
 	updatePlayerTier(player: Player, tier: string) {
-		this.playerStateSvc.updatePlayerTier(
-			player,
-			PLAYER_TIER[tier as keyof typeof PLAYER_TIER]);
+		this.playerStateSvc.updatePlayerTier(player, PLAYER_TIER[tier as keyof typeof PLAYER_TIER]);
 	}
 
 	setAvgTier() {
-		const sumCallback = (
-			previousValue: number,
-			currentValue: Player) => previousValue + currentValue.tier.valueOf()
+		const sumCallback = (previousValue: number,
+		                     currentValue: Player) => previousValue + currentValue.tier.valueOf()
 		const teamOneSum = this.teamOne.reduce<number>(sumCallback, 0);
 		const teamTwoSum = this.teamTwo.reduce<number>(sumCallback, 0);
 
@@ -127,6 +112,13 @@ export class RandomizedPickerComponent {
 		this.tierAvgs.teamTwoAvg = teamTwoSum / this.teamTwo.length;
 	}
 
+	@ViewChild(MatAutocompleteTrigger) autocompleteTrigger?: MatAutocompleteTrigger;
+
+	protected closeAutocompleteInput() {
+		this.autocompleteTrigger?.closePanel();
+	}
+
+	protected readonly before = before;
 }
 
 
