@@ -96,8 +96,8 @@ export class RandomizedPickerComponent {
 	}
 
 	private clipboardTeam() {
-		const teamOneJoin = `Time 1: \n${ this.teamOne.join('\n >') }\n\n`
-		const teamTwoJoin = `Time 2: \n${ this.teamTwo.join('\n >') }`
+		const teamOneJoin = `Time 1: \n >${ this.teamOne.map(ply => ply.nick).join('\n >') }\n\n`
+		const teamTwoJoin = `Time 2: \n >${ this.teamTwo.map(ply => ply.nick).join('\n >') }`
 		const success = this.clipboard.copy(teamOneJoin + teamTwoJoin);
 		if ( success ) {
 			this.notificationService.normal('Time randomizado e copiado!')
