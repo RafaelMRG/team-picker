@@ -1,13 +1,8 @@
-import {
-	effect,
-	inject,
-	Injectable,
-	signal,
-	untracked,
-	WritableSignal
-} from '@angular/core';
+import { effect, inject, Injectable, signal, untracked, WritableSignal } from '@angular/core';
 import { Leaders, Player, PLAYER_TIER } from "./player.types";
 import { LocalStorageService } from "./local-storage.service";
+import { Shuffle } from "../components/modals/shuffle-history/shuffle-history.component";
+
 
 @Injectable({
 	            providedIn: 'root'
@@ -25,12 +20,15 @@ export class PlayerStateService {
 	readonly leaderPlayers = signal<Player[]>([]);
 	readonly leaders = signal<Leaders>({ leaderA: null, leaderB: null });
 
+	// Shuffle history
+	readonly shuffleHistory = signal<Shuffle[]>([]);
 
 	private readonly localStorageSvc = inject(LocalStorageService);
 
 	constructor() {
 		this.addInsertedPlayersEffect();
-		this.localStorageSvc.initialize(this.playerHistory);
+		this.localStorageSvc.initializePlayerHistory(this.playerHistory);
+		this.localStorageSvc.initializeShuffleHistory(this.shuffleHistory);
 		this.addNewPlayerEffect();
 	}
 
@@ -47,11 +45,9 @@ export class PlayerStateService {
 	private insertIntoList(insertables: Player[], signal: WritableSignal<Player[]>) {
 		signal.update(players => {
 
-			const filteredInsertables = insertables.filter(
-				insertable => {
-					return !players.find(ply => ply === insertable)
-				}
-			)
+			const filteredInsertables = insertables.filter(insertable => {
+				return !players.find(ply => ply === insertable)
+			})
 			return [ ...players, ...filteredInsertables ];
 		})
 	}

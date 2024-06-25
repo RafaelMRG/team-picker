@@ -6,6 +6,7 @@ import { MatTooltip } from "@angular/material/tooltip";
 import { MatDialog } from "@angular/material/dialog";
 import { PreDefinedPlayersComponent } from "./components/modals/pre-defined-players/pre-defined-players.component";
 import { TierEditorComponent } from "./components/modals/tier-editor/tier-editor.component";
+import { ShuffleHistoryComponent } from "./components/modals/shuffle-history/shuffle-history.component";
 
 
 @Component({
@@ -24,6 +25,12 @@ export class AppComponent {
 
 	openTierEditor() {
 		this.dialog.open(TierEditorComponent, {
+			minWidth: '95vw', minHeight: '95vh', maxWidth: '95vw', maxHeight: '95vh'
+		})
+	}
+
+	openShuffleHistory() {
+		this.dialog.open(ShuffleHistoryComponent, {
 			minWidth: '95vw', minHeight: '95vh', maxWidth: '95vw', maxHeight: '95vh'
 		})
 	}

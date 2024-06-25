@@ -7,11 +7,7 @@ import { MatInput } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
 import { JsonPipe, NgIf } from "@angular/common";
 import {
-	MatChipGrid,
-	MatChipInput,
-	MatChipInputEvent,
-	MatChipRemove,
-	MatChipRow
+	MatChipGrid, MatChipInput, MatChipInputEvent, MatChipRemove, MatChipRow
 } from "@angular/material/chips";
 import { MatOption, MatSelect, MatSelectChange } from "@angular/material/select";
 import { MatList, MatListItem } from "@angular/material/list";
@@ -22,27 +18,12 @@ import { ANIM_CHECKMARK, ANIM_SLIDE_IN } from "../../material/animations";
 import { PLAYER_TIER } from "../../services/player.types";
 import { PlayerStateService } from "../../services/player-state.service";
 
+
 @Component({
 	           selector:    'app-leader-picker',
 	           standalone:  true,
 	           imports:     [
-		           MatStepperModule,
-		           ReactiveFormsModule,
-		           MatFormFieldModule,
-		           MatIcon,
-		           MatInput,
-		           MatButton,
-		           JsonPipe,
-		           MatChipGrid,
-		           MatChipRow,
-		           MatChipInput,
-		           MatChipRemove,
-		           MatSelect,
-		           MatOption,
-		           MatList,
-		           MatListItem,
-		           MatDivider,
-		           NgIf
+		           MatStepperModule, ReactiveFormsModule, MatFormFieldModule, MatIcon, MatInput, MatButton, JsonPipe, MatChipGrid, MatChipRow, MatChipInput, MatChipRemove, MatSelect, MatOption, MatList, MatListItem, MatDivider, NgIf
 	           ],
 	           templateUrl: './leader-picker.component.html',
 	           styleUrl:    './leader-picker.component.scss',
@@ -67,22 +48,17 @@ export class LeaderPickerComponent {
 
 	// First step
 	firstStepFg = new FormGroup({
-		                            firstLeader:  new FormControl<string>(
-			                            '',
-			                            [ Validators.required ]),
-		                            secondLeader: new FormControl<string>(
-			                            '',
-			                            [ Validators.required ]),
+		                            firstLeader:  new FormControl<string>('',
+		                                                                  [ Validators.required ]),
+		                            secondLeader: new FormControl<string>('', [ Validators.required ]),
 	                            })
 
 	// Second step
 	secondStepFg = new FormGroup({
-		                             availablePlayers: new FormControl<string[]>(
-			                             [],
-			                             [
-				                             Validators.required, Validators.minLength(8), Validators.maxLength(
+		                             availablePlayers: new FormControl<string[]>([], [
+			                             Validators.required, Validators.minLength(8), Validators.maxLength(
 				                             8)
-			                             ]),
+		                             ]),
 	                             })
 
 
@@ -97,16 +73,15 @@ export class LeaderPickerComponent {
 		const value = (event.value || '').trim();
 		if ( !value ) return;
 		if ( this.playerStateSvc
-			.leaderPlayers()
-			.findIndex(ply => ply.nick.trim().toLowerCase() === value.toLowerCase()) !== -1 ) {
+		         .leaderPlayers()
+		         .findIndex(ply => ply.nick.trim().toLowerCase() === value.toLowerCase()) !== -1 ) {
 			return;
 		}
 
-		const playerFromHistory =
-			this
-				.playerStateSvc
-				.playerHistory()
-				.find(ply => ply.nick.trim().toLowerCase() === value.toLowerCase());
+		const playerFromHistory = this
+			.playerStateSvc
+			.playerHistory()
+			.find(ply => ply.nick.trim().toLowerCase() === value.toLowerCase());
 
 		let player = { nick: value, tier: PLAYER_TIER.S }
 		if ( playerFromHistory ) {
@@ -114,10 +89,10 @@ export class LeaderPickerComponent {
 		}
 
 		this.playerStateSvc
-			.leaderPlayers
-			.update(players => {
-				return [ ...players, player ]
-			})
+		    .leaderPlayers
+		    .update(players => {
+			    return [ ...players, player ]
+		    })
 
 		event.chipInput!.clear();
 		this.availablePlayers.setValue(this.mapList());
@@ -127,18 +102,12 @@ export class LeaderPickerComponent {
 
 	// Third step
 	thirdStepFg = new FormGroup({
-		                            firstTeam:  new FormControl<string[]>(
-			                            [],
-			                            [
-				                            Validators.required, Validators.minLength(4), Validators.maxLength(
+		                            firstTeam:      new FormControl<string[]>([], [
+			                            Validators.required, Validators.minLength(4), Validators.maxLength(
 				                            4)
-			                            ]),
-		                            secondTeam: new FormControl<string[]>(
-			                            [],
-			                            [
-				                            Validators.required, Validators.minLength(4), Validators.maxLength(
-				                            4)
-			                            ]),
+		                            ]), secondTeam: new FormControl<string[]>([], [
+			Validators.required, Validators.minLength(4), Validators.maxLength(4)
+		]),
 	                            })
 
 	get firstTeam() {
