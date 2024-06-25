@@ -1,7 +1,9 @@
 import { inject, Injectable } from '@angular/core';
-import { remove } from "lodash";
+import { cloneDeep, remove } from "lodash";
 import { Player, PLAYER_TIER } from "./player.types";
 import { PlayerStateService } from "./player-state.service";
+import { Shuffle } from "../components/modals/shuffle-history/shuffle-history.component";
+
 
 @Injectable({
 	            providedIn: 'root'
@@ -30,6 +32,7 @@ export class RandomizerService {
 		const sortFn = (a: Player, b: Player) => a.tier - b.tier;
 		teamOne.sort(sortFn)
 		teamTwo.sort(sortFn);
+		this.addToShuffleHistory(teamOne, teamTwo);
 	}
 
 	private groupByTiers(players: Player[]) {
@@ -87,6 +90,20 @@ export class RandomizerService {
 				}
 			}
 		}
+	}
+
+	private addToShuffleHistory(teamOne: Player[], teamTwo: Player[]): void {
+		const teamOneLeader = teamOne[0].nick ?? '1';
+		const teamTwoLeader = teamTwo[0].nick ?? '2';
+
+		const teamOneClone = cloneDeep(teamOne);
+		const teamTwoClone = cloneDeep(teamTwo);
+
+		const date = new Date();
+		const shuffle: Shuffle = {
+			date, teamOne: teamOneClone, teamTwo: teamTwoClone, teamOneLeader, teamTwoLeader
+		}
+		this.playerStateSvc.shuffleHistory.update(hist => [ shuffle, ...hist ])
 	}
 
 }

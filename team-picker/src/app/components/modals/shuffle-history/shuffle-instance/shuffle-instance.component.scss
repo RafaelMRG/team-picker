@@ -1,0 +1,22 @@
+@use '@angular/material' as mat;
+@use 'variables' as *;
+
+mat-list {
+  width: max-content;
+
+  & mat-list-item {
+    & span {
+      display: inline-block;
+      width: 2rem;
+    }
+  }
+}
+
+.versus-title {
+  background-color: mat.get-theme-color($theme, tertiary, 40);
+}
+
+
+mat-dialog-content {
+  max-height: 90vh;
+}

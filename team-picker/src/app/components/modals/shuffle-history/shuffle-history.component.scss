@@ -1,0 +1,18 @@
+@use '@angular/material' as mat;
+@use 'variables' as *;
+
+mat-list {
+
+  & mat-divider:last-child {
+    display: none;
+  }
+}
+
+.versus-title {
+  background-color: mat.get-theme-color($theme, tertiary, 40);
+}
+
+
+mat-dialog-content {
+  max-height: 90vh;
+}
