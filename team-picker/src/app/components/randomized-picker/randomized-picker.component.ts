@@ -1,13 +1,13 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatFormField, MatHint, MatLabel } from "@angular/material/form-field";
 import { MatInput } from "@angular/material/input";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { MatList, MatListItem } from "@angular/material/list";
 import { MatIcon } from "@angular/material/icon";
 import { MatButton, MatMiniFabButton } from "@angular/material/button";
 import { MatTooltip } from "@angular/material/tooltip";
 import { MatDivider } from "@angular/material/divider";
-import { DecimalPipe, JsonPipe, NgTemplateOutlet } from "@angular/common";
+import { AsyncPipe, DecimalPipe, JsonPipe, NgTemplateOutlet } from "@angular/common";
 import { ANIM_SLIDE_IN } from "../../material/animations";
 import { NotificationService } from "../../services/notification.service";
 import { MatMenu, MatMenuItem, MatMenuTrigger } from "@angular/material/menu";
@@ -17,14 +17,14 @@ import { PlayerStateService } from "../../services/player-state.service";
 import { NumberToRankPipe } from "../../pipes/number-to-rank.pipe";
 import { Clipboard } from "@angular/cdk/clipboard";
 import { MatAutocomplete, MatAutocompleteTrigger, MatOption } from "@angular/material/autocomplete";
-import { before } from "lodash";
+import { map, Observable, startWith } from "rxjs";
 
 
 @Component({
 	           selector:    'app-randomized-picker',
 	           standalone:  true,
 	           imports:     [
-		           MatFormField, MatInput, MatLabel, ReactiveFormsModule, MatList, MatListItem, MatIcon, MatMiniFabButton, MatHint, MatButton, MatTooltip, MatDivider, NgTemplateOutlet, MatMenuTrigger, MatMenu, MatMenuItem, JsonPipe, DecimalPipe, NumberToRankPipe, MatAutocompleteTrigger, MatAutocomplete, MatOption
+		           MatFormField, MatInput, MatLabel, ReactiveFormsModule, MatList, MatListItem, MatIcon, MatMiniFabButton, MatHint, MatButton, MatTooltip, MatDivider, NgTemplateOutlet, MatMenuTrigger, MatMenu, MatMenuItem, JsonPipe, DecimalPipe, NumberToRankPipe, MatAutocompleteTrigger, MatAutocomplete, MatOption, AsyncPipe
 	           ],
 	           templateUrl: './randomized-picker.component.html',
 	           styleUrl:    './randomized-picker.component.scss',
@@ -32,7 +32,12 @@ import { before } from "lodash";
 		           ANIM_SLIDE_IN
 	           ]
            })
-export class RandomizedPickerComponent {
+export class RandomizedPickerComponent implements OnInit {
+
+	ngOnInit() {
+		this.addAutocompleteFilterHandler();
+	}
+
 
 	private readonly notificationService = inject(NotificationService);
 	private readonly randomizerService = inject(RandomizerService);
@@ -114,11 +119,29 @@ export class RandomizedPickerComponent {
 
 	@ViewChild(MatAutocompleteTrigger) autocompleteTrigger?: MatAutocompleteTrigger;
 
+	playerAutocompleteCtrl = new FormControl<string>('');
+	filteredPlayerAutoComplete?: Observable<Player[]>;
+
+	private addAutocompleteFilterHandler() {
+		this.filteredPlayerAutoComplete = this
+			.playerAutocompleteCtrl
+			.valueChanges
+			.pipe(startWith(''), map(playerAutoComplete => this._filter(playerAutoComplete || '')));
+	}
+
+	private _filter(value: string): Player[] {
+		const filterValue = value.toLowerCase();
+
+		return this.playerStateSvc
+		           .playerHistory()
+		           .filter(player => player.nick.toLowerCase().includes(filterValue))
+	}
+
 	protected closeAutocompleteInput() {
 		this.autocompleteTrigger?.closePanel();
 	}
 
-	protected readonly before = before;
+
 }
 
 
