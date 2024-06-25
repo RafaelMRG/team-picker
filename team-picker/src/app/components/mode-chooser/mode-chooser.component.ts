@@ -4,6 +4,7 @@ import { RandomizedPickerComponent } from "../randomized-picker/randomized-picke
 import { LeaderPickerComponent } from "../leader-picker/leader-picker.component";
 import { ANIM_CMP_TRANSITION } from "../../material/animations";
 
+
 @Component({
 	           selector:    'app-mode-chooser',
 	           standalone:  true,

@@ -1,11 +1,4 @@
-import {
-	Component,
-	inject,
-	QueryList,
-	TemplateRef,
-	ViewChild,
-	ViewChildren
-} from '@angular/core';
+import { Component, inject, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatButtonModule } from "@angular/material/button";
 import { MatList, MatListItem } from "@angular/material/list";
@@ -25,10 +18,9 @@ import { PlayerFilterPipe } from "../../../pipes/player-filter.pipe";
 import { MatMenu, MatMenuItem, MatMenuTrigger } from "@angular/material/menu";
 import { Clipboard } from "@angular/cdk/clipboard";
 import {
-	MatBottomSheet,
-	MatBottomSheetConfig,
-	MatBottomSheetRef
+	MatBottomSheet, MatBottomSheetConfig, MatBottomSheetRef
 } from "@angular/material/bottom-sheet";
+
 
 @Component({
 	           selector:    'app-pre-defined-players',
@@ -56,8 +48,8 @@ export class PreDefinedPlayersComponent {
 
 	submitToInsert() {
 		this.playerStateSvc
-			.insertablePlayers
-			.set([ ...this.playersToInsert ])
+		    .insertablePlayers
+		    .set([ ...this.playersToInsert ])
 	}
 
 	removePlayer(player: Player) {
@@ -105,9 +97,7 @@ export class PreDefinedPlayersComponent {
 		try {
 			const players: Player[] = JSON.parse(atob(base64String));
 			this.playerStateSvc.rewriteHistory(players);
-			this.notificationService.normal(
-				'Código carregado!',
-				undefined)
+			this.notificationService.normal('Código carregado!', undefined)
 			this.codeLoader?.dismiss();
 		} catch ( e ) {
 			console.error(e);

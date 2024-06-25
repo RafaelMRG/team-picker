@@ -1,9 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { PLAYER_TIER } from "../services/player.types";
 
+
 @Pipe({
-	      name:       'numberToRank',
-	      standalone: true
+	      name: 'numberToRank', standalone: true
       })
 export class NumberToRankPipe implements PipeTransform {
 
