@@ -1,0 +1,8 @@
+:host {
+  position: relative;
+  display: inline;
+
+  & span {
+    display: inline-block;
+  }
+}

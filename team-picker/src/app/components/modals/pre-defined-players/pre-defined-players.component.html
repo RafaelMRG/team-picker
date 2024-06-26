@@ -5,7 +5,9 @@
 		<input matInput [(ngModel)]="filterStr">
 	</mat-form-field>
 	@if (playerStateSvc.playerHistory()) {
-		<mat-list [@listAnimation]="(playerStateSvc.playerHistory() | playerFilter: filterStr).length">
+		<mat-list
+				[@listAnimation]="(playerStateSvc.playerHistory() | playerFilter:
+		filterStr).length">
 			@for (player of playerStateSvc.playerHistory() | playerFilter:filterStr; track player.nick) {
 				<mat-list-item>
 					<div class="d-flex justify-content-between">
@@ -65,6 +67,8 @@
 	</mat-menu>
 
 	<button mat-flat-button (click)="submitToInsert()">Inserir jogadores
+		<app-animated-counter [count]="insertListSize"></app-animated-counter>
+
 	</button>
 	<button class="ms-4" mat-button mat-dialog-close>Fechar</button>
 </mat-dialog-actions>
