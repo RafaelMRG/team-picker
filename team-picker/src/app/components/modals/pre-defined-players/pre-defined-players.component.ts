@@ -20,12 +20,13 @@ import { Clipboard } from "@angular/cdk/clipboard";
 import {
 	MatBottomSheet, MatBottomSheetConfig, MatBottomSheetRef
 } from "@angular/material/bottom-sheet";
+import { AnimatedCounterComponent } from "../../ui/animated-counter/animated-counter.component";
 
 
 @Component({
 	           selector:    'app-pre-defined-players',
 	           standalone:  true,
-	           imports:     [ MatDialogModule, MatButtonModule, MatList, MatListItem, MatIcon, MatTooltip, MatCheckbox, JsonPipe, MatFormField, MatInput, FormsModule, PlayerFilterPipe, MatLabel, MatMenuTrigger, MatMenu, MatMenuItem ],
+	           imports:     [ MatDialogModule, MatButtonModule, MatList, MatListItem, MatIcon, MatTooltip, MatCheckbox, JsonPipe, MatFormField, MatInput, FormsModule, PlayerFilterPipe, MatLabel, MatMenuTrigger, MatMenu, MatMenuItem, AnimatedCounterComponent ],
 	           templateUrl: './pre-defined-players.component.html',
 	           styleUrl:    './pre-defined-players.component.scss',
 	           animations:  [ ANIM_SLIDE_IN ]
@@ -37,6 +38,7 @@ export class PreDefinedPlayersComponent {
 	protected readonly clipboard = inject(Clipboard)
 	protected readonly bottomSheet = inject(MatBottomSheet);
 
+	get insertListSize() { return this.playersToInsert.length }
 
 	checkPlayer(event: MatCheckboxChange, player: Player) {
 		if ( event.checked ) {
