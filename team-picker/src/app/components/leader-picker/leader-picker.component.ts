@@ -5,7 +5,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIcon } from "@angular/material/icon";
 import { MatInput } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
-import { JsonPipe, NgIf } from "@angular/common";
+import { NgIf } from "@angular/common";
 import {
 	MatChipGrid, MatChipInput, MatChipInputEvent, MatChipRemove, MatChipRow
 } from "@angular/material/chips";
@@ -23,7 +23,7 @@ import { PlayerStateService } from "../../services/player-state.service";
 	           selector:    'app-leader-picker',
 	           standalone:  true,
 	           imports:     [
-		           MatStepperModule, ReactiveFormsModule, MatFormFieldModule, MatIcon, MatInput, MatButton, JsonPipe, MatChipGrid, MatChipRow, MatChipInput, MatChipRemove, MatSelect, MatOption, MatList, MatListItem, MatDivider, NgIf
+		           MatStepperModule, ReactiveFormsModule, MatFormFieldModule, MatIcon, MatInput, MatButton, MatChipGrid, MatChipRow, MatChipInput, MatChipRemove, MatSelect, MatOption, MatList, MatListItem, MatDivider, NgIf
 	           ],
 	           templateUrl: './leader-picker.component.html',
 	           styleUrl:    './leader-picker.component.scss',
@@ -133,7 +133,7 @@ export class LeaderPickerComponent {
 		// this.thirdStepFg.updateValueAndValidity();
 	}
 
-	playerAlreadyPicked(player: string) {
+	playerAlreadyPicked(player: string): boolean {
 		const indexFirst = this.firstTeam?.value?.indexOf(player) ?? -1
 		const indexSecond = this.secondTeam?.value?.indexOf(player) ?? -1
 		return indexFirst > -1 || indexSecond > -1;
