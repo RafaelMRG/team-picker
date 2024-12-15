@@ -55,14 +55,6 @@
       & mat-icon {
         vertical-align: unset !important;
       }
-
-      &.gear-anim {
-        &:hover {
-          transform: rotate(90deg);
-        }
-
-        transition: transform 200ms ease-in-out;
-      }
     }
   }
 

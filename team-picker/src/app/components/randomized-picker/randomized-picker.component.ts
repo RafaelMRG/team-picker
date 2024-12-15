@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatFormField, MatHint, MatLabel } from "@angular/material/form-field";
 import { MatInput } from "@angular/material/input";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
@@ -7,7 +7,7 @@ import { MatIcon } from "@angular/material/icon";
 import { MatButton, MatMiniFabButton } from "@angular/material/button";
 import { MatTooltip } from "@angular/material/tooltip";
 import { MatDivider } from "@angular/material/divider";
-import { AsyncPipe, DecimalPipe, JsonPipe, NgTemplateOutlet } from "@angular/common";
+import { AsyncPipe, DecimalPipe, NgTemplateOutlet } from "@angular/common";
 import { ANIM_SLIDE_IN } from "../../material/animations";
 import { NotificationService } from "../../services/notification.service";
 import { MatMenu, MatMenuItem, MatMenuTrigger } from "@angular/material/menu";
@@ -22,10 +22,9 @@ import { map, Observable, startWith } from "rxjs";
 
 @Component({
 	           selector:    'app-randomized-picker',
-	           standalone:  true,
-	           imports:     [
-		           MatFormField, MatInput, MatLabel, ReactiveFormsModule, MatList, MatListItem, MatIcon, MatMiniFabButton, MatHint, MatButton, MatTooltip, MatDivider, NgTemplateOutlet, MatMenuTrigger, MatMenu, MatMenuItem, JsonPipe, DecimalPipe, NumberToRankPipe, MatAutocompleteTrigger, MatAutocomplete, MatOption, AsyncPipe
-	           ],
+	           standalone:  true, imports: [
+		MatFormField, MatInput, MatLabel, ReactiveFormsModule, MatList, MatListItem, MatIcon, MatMiniFabButton, MatHint, MatButton, MatTooltip, MatDivider, NgTemplateOutlet, MatMenuTrigger, MatMenu, MatMenuItem, DecimalPipe, NumberToRankPipe, MatAutocompleteTrigger, MatAutocomplete, MatOption, AsyncPipe
+	],
 	           templateUrl: './randomized-picker.component.html',
 	           styleUrl:    './randomized-picker.component.scss',
 	           animations:  [
@@ -52,18 +51,18 @@ export class RandomizedPickerComponent implements OnInit {
 	}
 	protected readonly PLAYER_TIERS_STR = PLAYER_TIERS_STR;
 	protected readonly PLAYER_TIER = PLAYER_TIER;
+	@ViewChildren('autocompleteOptionRef') optionRefs!: QueryList<MatOption>;
 
 	removePlayerFromList(player: Player) {
 		this.playerStateSvc.rngPlayerList.update(plys => plys.filter(p => p !== player))
 	}
 
-	addPlayerToList(event: Event, player: string, input: HTMLInputElement): void {
+	addPlayerToList(event: Event, player: string): void {
 		event.preventDefault();
 		const newPlayer = { nick: player, tier: PLAYER_TIER.S };
 		this.processPlayerUpdate(player, newPlayer);
-		input.value = '';
+		this.playerAutocompleteCtrl.setValue('');
 	}
-
 
 	private processPlayerUpdate(player: string, newPlayer: Player) {
 
@@ -126,7 +125,7 @@ export class RandomizedPickerComponent implements OnInit {
 		this.filteredPlayerAutoComplete = this
 			.playerAutocompleteCtrl
 			.valueChanges
-			.pipe(startWith(''), map(playerAutoComplete => this._filter(playerAutoComplete || '')));
+			.pipe(startWith(''), map(playerAutoComplete => this._filter(playerAutoComplete || '')))
 	}
 
 	private _filter(value: string): Player[] {
@@ -140,7 +139,6 @@ export class RandomizedPickerComponent implements OnInit {
 	protected closeAutocompleteInput() {
 		this.autocompleteTrigger?.closePanel();
 	}
-
 
 }
 
