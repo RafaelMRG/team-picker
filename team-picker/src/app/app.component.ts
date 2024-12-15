@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
 
 	openShuffleHistory() {
 		this.dialog.open(ShuffleHistoryComponent, {
-			minWidth: '95vw', minHeight: '95vh', maxWidth: '95vw', maxHeight: '95vh'
+			minWidth: '50vw', minHeight: '95vh', maxWidth: '95vw', maxHeight: '95vh'
 		})
 	}
 
