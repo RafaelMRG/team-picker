@@ -10,14 +10,13 @@ import {
 	MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle
 } from "@angular/material/dialog";
 import { ShuffleInstanceComponent } from "./shuffle-instance/shuffle-instance.component";
-import { NumberToRankPipe } from "../../../pipes/number-to-rank.pipe";
 
 
 @Component({
 	           selector:    'app-shuffle-history',
 	           standalone:  true,
 	           imports:     [
-		           MatList, MatListItem, MatIcon, MatMiniFabButton, MatDivider, DateFormaterPipe, MatButton, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle, NumberToRankPipe
+		           MatList, MatListItem, MatIcon, MatMiniFabButton, MatDivider, DateFormaterPipe, MatButton, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle
 	           ],
 	           templateUrl: './shuffle-history.component.html',
 	           styleUrl:    './shuffle-history.component.scss'
@@ -29,7 +28,7 @@ export class ShuffleHistoryComponent {
 
 	openHistoryInstance(shuffle: Shuffle) {
 		this.dialog.open(ShuffleInstanceComponent, {
-			width: '80vw', height: '80vh', data: shuffle, maxWidth: '90vw', maxHeight: '90vh'
+			width: '50vw', height: '80vh', data: shuffle, maxWidth: '90vw', maxHeight: '90vh'
 		})
 	}
 
